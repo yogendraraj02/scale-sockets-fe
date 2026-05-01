@@ -6,6 +6,7 @@ import ActivityLog from "./components/ActivityLog";
 import MessageSender from "./components/MessageSender";
 import { useSocket } from "./hooks/useSocket";
 import MessageInbox from "./components/MessageInbox";
+import { useNavigate } from "react-router-dom";
 
 function App() {
   const [clients, setClients] = useState<Client[]>([]);
@@ -14,6 +15,7 @@ function App() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [userId, setUserId] = useState("");
   const [registeredId, setRegisteredId] = useState("");
+  const navigate = useNavigate()
 
   const handleDashboardUpdate = (data: DashboardData) => {
     setClients(data.clients);
@@ -33,13 +35,16 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-5xl mx-auto">
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-lg font-medium text-gray-800">scale-sockets</h1>
-            <p className="text-xs text-gray-400">websocket scaling dashboard</p>
-          </div>
-
-          {/* register box */}
+        <div className="mb-6 flex items-center justify-between bg-white px-5 py-3 rounded-xl border border-slate-200 shadow-sm">
+      <div>
+        <h1 className="text-base font-semibold text-slate-800 tracking-tight">scale-sockets</h1>
+        <p className="text-xs text-slate-400">websocket scaling simulator</p>
+      </div>
+          <div className="flex items-center gap-4">
+             <button onClick={() => navigate('/about')} className="text-xs text-slate-400 hover:text-slate-600 transition-colors">
+          about
+        </button>          
+        {/* register box */}
           <div className="flex items-center gap-2">
             {registeredId ? (
               <div className="flex items-center gap-2 px-3 py-2 bg-emerald-50 border border-emerald-200 rounded-lg">
@@ -79,6 +84,7 @@ function App() {
                 </button>
               </>
             )}
+          </div>
           </div>
         </div>
 

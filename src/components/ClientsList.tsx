@@ -6,8 +6,8 @@ interface Props {
 
 function ClientsList({ clients }: Props) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4">
-      <h2 className="text-xs font-medium text-gray-400 uppercase tracking-widest mb-3">
+    <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+      <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">
         Connected Clients
       </h2>
 
@@ -20,7 +20,7 @@ function ClientsList({ clients }: Props) {
           clients.map((client) => (
             <div
               key={client.userId}
-              className="flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg"
+              className="flex items-center justify-between px-3 py-2 bg-slate-50 rounded-lg border border-slate-100"
             >
               <div className="flex items-center gap-2">
                 <div className="w-7 h-7 rounded-full bg-indigo-100 text-indigo-600 text-xs font-medium flex items-center justify-center">

@@ -7,7 +7,7 @@ interface Props {
 function ActivityLog({ logs }: Props) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-4 col-span-2">
-      <h2 className="text-xs font-medium text-gray-400 uppercase tracking-widest mb-3">
+      <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">
         Activity Log
       </h2>
 
@@ -20,7 +20,7 @@ function ActivityLog({ logs }: Props) {
           logs.map((log, index) => (
             <div
               key={index}
-              className="flex items-start gap-3 px-3 py-2 bg-gray-50 rounded-lg font-mono"
+              className="flex items-start gap-3 px-3 py-2 bg-slate-50 rounded-lg border border-slate-100 font-mono"
             >
               <span className="text-xs text-gray-400 shrink-0 mt-0.5">
                 {new Date(log.time).toLocaleTimeString()}

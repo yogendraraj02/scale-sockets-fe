@@ -8,7 +8,7 @@ interface Props {
 function MessageInbox({ messages, currentUserId }: Props) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-4 col-span-2">
-      <h2 className="text-xs font-medium text-gray-400 uppercase tracking-widest mb-3">
+      <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">
         Inbox
       </h2>
 
