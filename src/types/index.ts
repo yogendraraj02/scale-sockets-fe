@@ -22,15 +22,9 @@ export interface Message {
   text: string
 }
 
-export interface GetServerResponse {
+export interface DashboardData {
   servers: Server[]
-}
-
-export interface GetClientResponse {
   clients: Client[]
-}
-
-
-export interface GetLogsResponse {
   logs: Log[]
 }
+

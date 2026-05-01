@@ -1,21 +1,15 @@
 import { useState } from 'react'
-import { useSocket } from '../hooks/useSocket'
-import type { Message } from '../types'
 interface Props{
-  userId: string
+  sendMessage: (to: string, text: string) => void
 }
 
 
-function MessageSender({userId}: Props) {
+function MessageSender({sendMessage}: Props) {
   const [to, setTo] = useState('')
   const [text, setText] = useState('')
   const [status, setStatus] = useState<'idle' | 'sent' | 'error'>('idle')
-  const [messages, setMessages] = useState<Message[]>([])
   
-  const { sendMessage } = useSocket(userId, (msg: Message) => {
-    setMessages((prev) => [...prev, { from: msg.from, text: msg.text }])
-  })
-
+ 
   const handleSend = () => {
     if (!to.trim() || !text.trim()) return
 
@@ -68,18 +62,6 @@ function MessageSender({userId}: Props) {
       {status === 'error' && (
         <p className="text-xs text-red-400 mt-2">failed to send</p>
       )}
-
-      <div className="">
-        {messages.length > 0 && (
-          <div className="mt-4 p-3 bg-gray-50 rounded-lg max-h-32 overflow-y-auto">
-            {messages.map((msg, index) => (
-              <div key={index} className="text-sm text-gray-700">
-                <span className="font-medium">{msg.from}:</span> {msg.text}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
 
     </div>
     

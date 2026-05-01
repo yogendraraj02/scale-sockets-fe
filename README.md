@@ -1,4 +1,4 @@
-# WebSocket Scaling Simulator
+# Scale Sockets - WebSocket Scaling Simulator
 
 A production-inspired demonstration of how real-time WebSocket applications scale horizontally across multiple server instances — with live failure simulation and cross-server messaging via Redis Pub/Sub.
 
