@@ -50,7 +50,7 @@ function ServersList({ servers, onRefresh }: Props) {
       <span className="text-sm font-medium text-gray-800">{server.serverId}</span>
       <span className="text-xs text-gray-400">:{server.port}</span>
       {server.serverId === 's1' && (
-        <span className="text-xs text-indigo-400 bg-indigo-100 px-2 py-0.5 rounded-md">primary</span>
+     <span className="text-xs font-medium text-indigo-500 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-md">core</span>
       )}
     </div>
 

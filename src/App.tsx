@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { Client, Server, Log, Message, DashboardData } from "./types";
 import ServersList from "./components/ServersList";
 import ClientsList from "./components/ClientsList";

@@ -8,6 +8,10 @@ export function useSocket(userId: string, onMessage: (message: Message) => void,
     useEffect(() => {
         const socket = io(SOCKET_URL, {
             transports: ['websocket'],
+            reconnection: true,
+            reconnectionAttempts: 5,
+            reconnectionDelay: 1000,
+            reconnectionDelayMax: 5000,
         });
         socketRef.current = socket;
 
