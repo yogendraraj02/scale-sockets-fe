@@ -1,0 +1,45 @@
+name: Frontend Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Build
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+
+      - name: Copy dist to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "frontend/dist/*"
+          target: "~/scale-sockets-client/dist"
+          strip_components: 2
+
+      - name: Reload NGINX
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/Projects/scale-sockets-client
+            docker exec nginx-lb nginx -s reload
