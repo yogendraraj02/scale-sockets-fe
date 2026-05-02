@@ -36,7 +36,7 @@ function App() {
   <div className="min-h-screen bg-slate-50">
     
     {/* header */}
-    <div className="bg-white border-b border-slate-200 px-4 py-3 sticky top-0 z-10">
+    <div className="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 sticky top-0 z-10">
       <div className="max-w-5xl mx-auto flex items-center justify-between">
         <div>
           <h1 className="text-sm font-semibold text-slate-800">scale-sockets</h1>
@@ -74,7 +74,7 @@ function App() {
     </div>
 
     {/* main */}
-    <div className="max-w-5xl mx-auto px-4 py-5">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-5">
       
       {/* top row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">

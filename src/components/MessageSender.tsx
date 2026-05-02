@@ -26,7 +26,7 @@ function MessageSender({sendMessage}: Props) {
   }
 
   return (
-  <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 h-full">
+  <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 h-full col-span-2">
     <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">
       Send Message
     </h2>
