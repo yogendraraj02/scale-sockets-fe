@@ -35,7 +35,7 @@ function ServersList({ servers, onRefresh }: Props) {
         Servers
       </h2>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1">
         {servers.map((server) => (
   <div
     key={server.serverId}
