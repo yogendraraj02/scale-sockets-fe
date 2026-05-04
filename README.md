@@ -48,8 +48,8 @@ The dashboard acts as a visual layer to understand how load balancing and Redis-
   <img src="./assets/failure.png" width="48%" />
 </p>
 <p align="center">
-  <img src="./assets/c1000.png" width="48%" />
-  <img src="./assets/c5000.png" width="48%" />
+  <img src="./assets/c1000.png" width="96%" />
+  <!-- <img src="./assets/c5000.png" width="48%" /> -->
 </p>
 
 ---
@@ -96,19 +96,23 @@ WS-3 finds C3 locally → delivers ✅
 ---
 
 ## Load Test Results
-
+<!-- 
 | Connections | Active Peak | Response p95 | CPU Usage | Failures |
 | ----------- | ----------- | ------------ | --------- | -------- |
 | 540         | Sustained   | 3.2ms        | 45%       | 0%       |
 | 990         | Sustained   | 0.9ms        | 50%       | 0%       |
-| 5,007       | ~1,000      | 5.9ms        | 125%      | 15%      |
+| 5,007       | ~1,000      | 5.9ms        | 125%      | 15%      | -->
+## Load Test Results
+
+| Connections | Active Peak | Response p95 | CPU Usage | Failures |
+|-------------|-------------|--------------|-----------|----------|
+| 990         | ~530        | 1.3ms        | ~80%      | 0%       |
 
 **Key Findings:**
-
-* Handles **1000+ concurrent connections** efficiently
-* Sub-millisecond latency under normal load
-* System saturates beyond 1000 active connections
-* Automatic failover when instances crash
+* Handled **~530 concurrent connections** with **100K+ messages** processed
+* Median latency: **0.1ms**, p95: **1.3ms** under load
+* Saturation point: **~500-600 active connections** (CPU ~80%, Nginx spiked to 130%)
+* Zero failures across 990 completed user sessions
 
 **Tested with:** Artillery load testing tool
 
