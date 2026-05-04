@@ -106,12 +106,12 @@ WS-3 finds C3 locally → delivers ✅
 
 | Connections | Active Peak | Response p95 | CPU Usage | Failures |
 |-------------|-------------|--------------|-----------|----------|
-| 990         | ~530        | 1.3ms        | ~80%      | 0%       |
+| 990         | ~530        | 1.3ms        | ~90%      | 0%       |
 
 **Key Findings:**
 * Handled **~530 concurrent connections** with **100K+ messages** processed
 * Median latency: **0.1ms**, p95: **1.3ms** under load
-* Saturation point: **~500-600 active connections** (CPU ~80%, Nginx spiked to 130%)
+* Saturation point: **~500-600 active connections** (CPU ~90%, Nginx spiked to 130%)
 * Zero failures across 990 completed user sessions
 
 **Tested with:** Artillery load testing tool
