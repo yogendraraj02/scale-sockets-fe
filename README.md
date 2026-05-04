@@ -95,7 +95,6 @@ WS-3 finds C3 locally → delivers ✅
 
 ---
 
-## Load Test Results
 <!-- 
 | Connections | Active Peak | Response p95 | CPU Usage | Failures |
 | ----------- | ----------- | ------------ | --------- | -------- |
