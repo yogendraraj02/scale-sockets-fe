@@ -6,6 +6,7 @@ import ActivityLog from "./components/ActivityLog";
 import MessageSender from "./components/MessageSender";
 import { useSocket } from "./hooks/useSocket";
 import MessageInbox from "./components/MessageInbox";
+import AIAnalyzer from "./components/AIAnalyzer";
 import { useNavigate } from "react-router-dom";
 
 function App() {
@@ -103,6 +104,8 @@ function App() {
         <a href="https://linkedin.com/in/yogendraraj02" target="_blank" className="hover:text-slate-600 transition-colors">linkedin</a>
       </div>
     </footer>
+
+    <AIAnalyzer />
   </div>
 )
 }
