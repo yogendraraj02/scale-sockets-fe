@@ -30,8 +30,8 @@ function ServersList({ servers, onRefresh }: Props) {
   };
 
  return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
-      <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">
+    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-4">
+      <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">
         Servers
       </h2>
 
@@ -39,18 +39,18 @@ function ServersList({ servers, onRefresh }: Props) {
         {servers.map((server) => (
   <div
     key={server.serverId}
-    className={`flex items-center justify-between px-3 py-2 rounded-lg ${
-      server.serverId === 's1' 
-        ? 'bg-grey-50 border border-indigo-200' 
-        : 'bg-gray-50'
+    className={`flex items-center justify-between px-3 py-2 rounded-lg transition-colors ${
+      server.serverId === 's1'
+        ? 'bg-indigo-400/5 border border-indigo-400/20'
+        : 'bg-white/5 border border-white/5'
     }`}
   >
     <div className="flex items-center gap-2">
-      <span className={`w-2 h-2 rounded-full ${server.status === 'up' ? 'bg-emerald-400' : 'bg-red-400'}`} />
-      <span className="text-sm font-medium text-gray-800">{server.serverId}</span>
-      <span className="text-xs text-gray-400">:{server.port}</span>
+      <span className={`w-2 h-2 rounded-full ${server.status === 'up' ? 'bg-emerald-400 shadow-sm shadow-emerald-400/50' : 'bg-red-400'}`} />
+      <span className="text-sm font-medium text-slate-100">{server.serverId}</span>
+      <span className="text-xs text-white/30">:{server.port}</span>
       {server.serverId === 's1' && (
-     <span className="text-xs font-medium text-indigo-500 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-md">core</span>
+     <span className="text-xs font-medium text-indigo-300 bg-indigo-400/20 border border-indigo-400/30 px-2 py-0.5 rounded-md">core</span>
       )}
     </div>
 
@@ -59,7 +59,7 @@ function ServersList({ servers, onRefresh }: Props) {
         <button
           onClick={() => handleStart(server.serverId)}
           disabled={loadingId === server.serverId}
-          className="text-xs px-3 py-1 rounded-md border border-emerald-200 text-emerald-600 hover:bg-emerald-50 disabled:opacity-40 transition-colors"
+          className="text-xs px-3 py-1 rounded-md border border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10 disabled:opacity-40 transition-colors"
         >
           {loadingId === server.serverId ? 'starting...' : 'start'}
         </button>
@@ -69,7 +69,7 @@ function ServersList({ servers, onRefresh }: Props) {
         <button
           onClick={() => handleStop(server.serverId)}
           disabled={loadingId === server.serverId}
-          className="text-xs px-3 py-1 rounded-md border border-red-200 text-red-500 hover:bg-red-50 disabled:opacity-40 transition-colors"
+          className="text-xs px-3 py-1 rounded-md border border-red-400/30 text-red-400 hover:bg-red-400/10 disabled:opacity-40 transition-colors"
         >
           {loadingId === server.serverId ? 'stopping...' : 'stop'}
         </button>
@@ -77,7 +77,7 @@ function ServersList({ servers, onRefresh }: Props) {
         <button
           onClick={() => handleStart(server.serverId)}
           disabled={loadingId === server.serverId}
-          className="text-xs px-3 py-1 rounded-md border border-emerald-200 text-emerald-600 hover:bg-emerald-50 disabled:opacity-40 transition-colors"
+          className="text-xs px-3 py-1 rounded-md border border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10 disabled:opacity-40 transition-colors"
         >
           {loadingId === server.serverId ? 'starting...' : 'start'}
         </button>

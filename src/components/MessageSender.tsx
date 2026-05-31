@@ -26,8 +26,8 @@ function MessageSender({sendMessage}: Props) {
   }
 
   return (
-  <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 h-full col-span-2">
-    <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">
+  <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-4 h-full col-span-2">
+    <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">
       Send Message
     </h2>
 
@@ -37,7 +37,7 @@ function MessageSender({sendMessage}: Props) {
         placeholder="to: user_id"
         value={to}
         onChange={(e) => setTo(e.target.value)}
-        className="w-full sm:w-32 text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 focus:outline-none focus:border-indigo-300 placeholder:text-slate-300"
+        className="w-full sm:w-32 text-sm px-3 py-2 rounded-lg border border-white/10 bg-white/5 text-white focus:outline-none focus:border-indigo-400/50 placeholder:text-white/20"
       />
       <input
         placeholder="message..."
@@ -45,7 +45,7 @@ function MessageSender({sendMessage}: Props) {
         type='text'
         onChange={(e) => setText(e.target.value)}
         onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
-        className="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 focus:outline-none focus:border-indigo-300 placeholder:text-slate-300"
+        className="w-full text-sm px-3 py-2 rounded-lg border border-white/10 bg-white/5 text-white focus:outline-none focus:border-indigo-400/50 placeholder:text-white/20"
       />
       <button
         onClick={handleSend}
@@ -56,7 +56,7 @@ function MessageSender({sendMessage}: Props) {
       </button>
     </div>
 
-    {status === 'sent' && <p className="text-xs text-emerald-500 mt-2">message sent</p>}
+    {status === 'sent' && <p className="text-xs text-emerald-400 mt-2">message sent</p>}
     {status === 'error' && <p className="text-xs text-red-400 mt-2">failed to send</p>}
   </div>
 )

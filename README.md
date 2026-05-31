@@ -3,7 +3,7 @@
 A production-inspired demonstration of how real-time WebSocket applications scale horizontally across multiple server instances — with live failure simulation and cross-server messaging via Redis Pub/Sub.
 
 
-**Live Demo:** http://3.86.9.144:8080/
+**Live Demo:** http://3.88.147.38:8080/
 ---
 
 ## The Problem
