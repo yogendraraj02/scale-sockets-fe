@@ -176,15 +176,16 @@ export default function AIAnalyzer() {
                   ))}
                 </div>
 
-                {/* divider + label */}
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-semibold text-white/40 uppercase tracking-widest whitespace-nowrap">AI Analysis</span>
-                  <div className="flex-1 h-px bg-white/10" />
-                  <span className="text-[10px] text-white/30 font-mono">{result.llmAnalysis.model}</span>
-                </div>
-
-                {/* llm markdown */}
-                <LLMText text={result.llmAnalysis.analysis} />
+                {result.llmAnalysis && (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-semibold text-white/40 uppercase tracking-widest whitespace-nowrap">AI Analysis</span>
+                      <div className="flex-1 h-px bg-white/10" />
+                      <span className="text-[10px] text-white/30 font-mono">{result.llmAnalysis.model}</span>
+                    </div>
+                    <LLMText text={result.llmAnalysis.analysis} />
+                  </>
+                )}
               </div>
             ) : null}
           </div>
@@ -193,7 +194,7 @@ export default function AIAnalyzer() {
           {!isLoading && (
             <div className="shrink-0 px-4 py-2.5 border-t border-white/10 bg-white/5 flex items-center justify-between">
               <span className="text-[10px] text-white/30 font-mono">
-                {result
+                {result?.llmAnalysis
                   ? `${result.llmAnalysis.usage.totalTokenCount.toLocaleString()} tokens`
                   : ''}
               </span>

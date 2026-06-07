@@ -16,7 +16,6 @@ This project solves that problem using **Redis Pub/Sub as a message broker** bet
 **Solution:** Redis Pub/Sub as a message broker + Nginx load balancing + multiple WebSocket server instances + containerized architecture.
 
 ---
-
 ## Frontend Dashboard
 
 A lightweight dashboard is included to observe the system in real time.
@@ -33,11 +32,11 @@ It provides:
   Real-time stream of events such as connections, disconnections, server lifecycle, and message routing.
 
 - **Messaging Interface**  
-  Send messages between clients and observe delivery across different server instances.
+  Send messages between registered clients. The recipient list is populated dynamically from currently online users — no manual user ID entry required.
 
-The dashboard acts as a visual layer to understand how load balancing and Redis-based message propagation behave under different conditions.
-
-
+- **AI Log Analyzer**  
+  A built-in analyzer powered by Gemini that inspects recent activity logs and surfaces patterns, anomalies, and recommendations. Supports multiple analysis modes (`summary`, `anomaly`, `performance`) over configurable time ranges (1h, 6h, 24h). Falls back to a lightweight rule-based analysis when no API key is configured.
+  
 ---
 
 ## Screenshot :  Local Frontend & Grafana Dashboard
