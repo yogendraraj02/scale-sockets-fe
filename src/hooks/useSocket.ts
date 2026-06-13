@@ -5,30 +5,28 @@ import type { DashboardData, Message } from "../types";
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 interface UseSocketOptions {
-  userId: string;
+  token: string;
   onMessage: (message: Message) => void;
   onDashboardUpdate: (data: DashboardData) => void;
-  onRegisterError: (reason: string) => void;
+  onAuthError: () => void;
 }
 
-export function useSocket({ userId, onMessage, onDashboardUpdate, onRegisterError }: UseSocketOptions) {
+export function useSocket({ token, onMessage, onDashboardUpdate, onAuthError }: UseSocketOptions) {
   const socketRef = useRef<Socket | null>(null);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
 
-  // Keep callbacks in refs so socket listeners always call the latest version
-  // without needing to re-create the socket on every render
   const onMessageRef = useRef(onMessage);
   const onDashboardUpdateRef = useRef(onDashboardUpdate);
-  const onRegisterErrorRef = useRef(onRegisterError);
+  const onAuthErrorRef = useRef(onAuthError);
   useEffect(() => { onMessageRef.current = onMessage; }, [onMessage]);
   useEffect(() => { onDashboardUpdateRef.current = onDashboardUpdate; }, [onDashboardUpdate]);
-  useEffect(() => { onRegisterErrorRef.current = onRegisterError; }, [onRegisterError]);
+  useEffect(() => { onAuthErrorRef.current = onAuthError; }, [onAuthError]);
 
   useEffect(() => {
-    // Don't connect until we have a userId
-    if (!userId) return;
+    if (!token) return;
 
     const socket = io(SOCKET_URL, {
+      auth: { token },
       transports: ['websocket'],
       reconnection: true,
       reconnectionAttempts: 5,
@@ -38,12 +36,14 @@ export function useSocket({ userId, onMessage, onDashboardUpdate, onRegisterErro
     socketRef.current = socket;
 
     socket.on('connect', () => {
-      socket.emit('register', { userId });
+      socket.emit('register');
       socket.emit('request:dashboard');
     });
 
-    socket.on('register:error', ({ reason }: { reason: string }) => {
-      onRegisterErrorRef.current(reason);
+    socket.on('connect_error', (err) => {
+      if (err.message === 'Authentication required') {
+        onAuthErrorRef.current();
+      }
     });
 
     socket.on('online-users', ({ users }: { users: string[] }) => {
@@ -57,7 +57,7 @@ export function useSocket({ userId, onMessage, onDashboardUpdate, onRegisterErro
       socket.disconnect();
       socketRef.current = null;
     };
-  }, [userId]); // only re-create socket when userId changes
+  }, [token]);
 
   const sendMessage = (to: string, text: string) => {
     socketRef.current?.emit('message', { to, text });

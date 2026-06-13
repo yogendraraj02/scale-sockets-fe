@@ -8,15 +8,15 @@ import { useSocket } from "./hooks/useSocket";
 import MessageInbox from "./components/MessageInbox";
 import AIAnalyzer from "./components/AIAnalyzer";
 import { useNavigate } from "react-router-dom";
+import { getAuthToken } from "./services/api";
 
-const STORAGE_KEY = "scale_sockets_userId";
+const TOKEN_KEY = "ws_token";
+const USER_KEY = "scale_sockets_userId";
 
-function promptForUsername(prefill = "", error = ""): string {
-  const msg = error
-    ? `${error}\n\nChoose a different username:`
-    : "Enter your username to join:";
-  const name = window.prompt(msg, prefill)?.trim() ?? "";
-  return name;
+async function acquireToken(userId: string): Promise<string> {
+  const token = await getAuthToken(userId);
+  sessionStorage.setItem(TOKEN_KEY, token);
+  return token;
 }
 
 function App() {
@@ -24,21 +24,38 @@ function App() {
   const [servers, setServers] = useState<Server[]>([]);
   const [logs, setLogs] = useState<Log[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [registeredId, setRegisteredId] = useState("");
+  const [token, setToken] = useState(sessionStorage.getItem(TOKEN_KEY) ?? "");
+  const [userId, setUserId] = useState(sessionStorage.getItem(USER_KEY) ?? "");
   const navigate = useNavigate();
 
   useEffect(() => {
-    // localStorage is shared across tabs — prevents same name on two tabs
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      setRegisteredId(saved);
-    } else {
-      const name = promptForUsername();
-      if (name) {
-        localStorage.setItem(STORAGE_KEY, name);
-        setRegisteredId(name);
-      }
-    }
+    if (token) return;
+
+    const name = window.prompt("Enter your username to join:")?.trim() ?? "";
+    if (!name) return;
+
+    acquireToken(name).then((t) => {
+      sessionStorage.setItem(USER_KEY, name);
+      setUserId(name);
+      setToken(t);
+    });
+  }, []);
+
+  const handleAuthError = useCallback(() => {
+    sessionStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(USER_KEY);
+    setToken("");
+    setUserId("");
+
+    setTimeout(() => {
+      const name = window.prompt("Session expired. Enter your username to reconnect:")?.trim() ?? "";
+      if (!name) return;
+      acquireToken(name).then((t) => {
+        sessionStorage.setItem(USER_KEY, name);
+        setUserId(name);
+        setToken(t);
+      });
+    }, 300);
   }, []);
 
   const handleDashboardUpdate = useCallback((data: DashboardData) => {
@@ -51,26 +68,11 @@ function App() {
     setMessages((prev) => [msg, ...prev]);
   }, []);
 
-  const handleRegisterError = useCallback((reason: string) => {
-    // Clear stored name so other tabs don't reuse it either
-    localStorage.removeItem(STORAGE_KEY);
-    setRegisteredId(""); // disconnect current socket
-
-    // Defer prompt so socket teardown completes first
-    setTimeout(() => {
-      const name = promptForUsername("", reason);
-      if (name) {
-        localStorage.setItem(STORAGE_KEY, name);
-        setRegisteredId(name);
-      }
-    }, 300);
-  }, []);
-
   const { sendMessage, refreshDashboard, requestOnlineUsers, onlineUsers } = useSocket({
-    userId: registeredId,
+    token,
     onMessage: handleMessage,
     onDashboardUpdate: handleDashboardUpdate,
-    onRegisterError: handleRegisterError,
+    onAuthError: handleAuthError,
   });
 
   return (
@@ -87,13 +89,13 @@ function App() {
             <button onClick={() => navigate('/about')} className="text-xs text-white/40 hover:text-white/70 transition-colors">
               about
             </button>
-            {registeredId ? (
+            {userId ? (
               <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-400/10 border border-emerald-400/20 rounded-lg">
                 <div className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
                 </div>
-                <span className="text-xs text-emerald-400 font-medium">{registeredId}</span>
+                <span className="text-xs text-emerald-400 font-medium">{userId}</span>
               </div>
             ) : (
               <span className="text-xs text-white/30 italic">not registered</span>
@@ -112,8 +114,8 @@ function App() {
           <ActivityLog logs={logs} />
         </div>
         <div className="grid grid-cols-1 gap-4 mb-4">
-          <MessageSender sendMessage={sendMessage} onlineUsers={onlineUsers} requestOnlineUsers={requestOnlineUsers} currentUserId={registeredId} />
-          <MessageInbox messages={messages} currentUserId={registeredId} />
+          <MessageSender sendMessage={sendMessage} onlineUsers={onlineUsers} requestOnlineUsers={requestOnlineUsers} currentUserId={userId} />
+          <MessageInbox messages={messages} currentUserId={userId} />
         </div>
       </div>
 
