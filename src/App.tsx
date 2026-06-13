@@ -127,7 +127,7 @@ function App() {
         </div>
       </footer>
 
-      <AIAnalyzer />
+      <AIAnalyzer token={token} />
     </div>
   );
 }

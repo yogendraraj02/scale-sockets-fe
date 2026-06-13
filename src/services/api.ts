@@ -15,5 +15,10 @@ export const getAuthToken = async (userId: string): Promise<string> => {
 
 export const stopServer = (serverId: string) => axios.post(`${BASE_URL}/servers/${serverId}/stop`);
 export const startServer = (serverId: string) => axios.post(`${BASE_URL}/servers/${serverId}/start`);
-export const analyzeLogs = () => axios.post(`${BASE_URL}/analyze-logs`, { timeRange: '1h', analysisType: 'summary' });
+export const analyzeLogs = (token: string) =>
+  axios.post(
+    `${BASE_URL}/analyze-logs`,
+    { timeRange: '1h', analysisType: 'summary' },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
 

@@ -10,6 +10,7 @@ interface AnalysisPatterns {
 
 interface AnalysisResponse {
   success: boolean;
+  cached: boolean;
   data: { totalEvents: number; timeRange: string };
   analysis: {
     summary: string;
@@ -20,7 +21,8 @@ interface AnalysisResponse {
     analysis: string;
     model: string;
     usage: { promptTokenCount: number; candidatesTokenCount: number; totalTokenCount: number };
-  };
+  } | null;
+  llmError: string | null;
 }
 
 function getElapsed(date: Date): string {
@@ -87,7 +89,7 @@ const STAT_CHIPS: { key: keyof AnalysisPatterns; label: string; color: string }[
   { key: 'messages',       label: 'messages',    color: 'bg-indigo-400/20 text-indigo-400 border-indigo-400/30' },
 ];
 
-export default function AIAnalyzer() {
+export default function AIAnalyzer({ token }: { token: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [result, setResult] = useState<AnalysisResponse | null>(null);
@@ -99,17 +101,23 @@ export default function AIAnalyzer() {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await analyzeLogs();
+      const res = await analyzeLogs(token);
       setResult(res.data as AnalysisResponse);
-      const now = new Date();
-      setLastFetched(now);
+      setLastFetched(new Date());
       setDotVisible(true);
-    } catch {
-      setError('Could not reach the analysis endpoint. Make sure the server is running.');
+    } catch (err: unknown) {
+      const status = (err as { response?: { status: number } })?.response?.status;
+      if (status === 429) {
+        setError('Rate limit reached. You can run 5 analyses per hour.');
+      } else if (status === 401) {
+        setError('Session expired. Please refresh the page to reconnect.');
+      } else {
+        setError('Could not reach the analysis endpoint. Make sure the server is running.');
+      }
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [token]);
 
   useEffect(() => { fetchAnalysis(); }, [fetchAnalysis]);
 
@@ -176,7 +184,7 @@ export default function AIAnalyzer() {
                   ))}
                 </div>
 
-                {result.llmAnalysis && (
+                {result.llmAnalysis ? (
                   <>
                     <div className="flex items-center gap-2">
                       <span className="text-[10px] font-semibold text-white/40 uppercase tracking-widest whitespace-nowrap">AI Analysis</span>
@@ -185,7 +193,12 @@ export default function AIAnalyzer() {
                     </div>
                     <LLMText text={result.llmAnalysis.analysis} />
                   </>
-                )}
+                ) : result.llmError ? (
+                  <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-400/10 border border-amber-400/20">
+                    <span className="text-amber-400 text-sm">⚠</span>
+                    <p className="text-xs text-amber-300/80">{result.llmError}</p>
+                  </div>
+                ) : null}
               </div>
             ) : null}
           </div>
